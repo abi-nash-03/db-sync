@@ -1,31 +1,42 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
 
+	"github.com/spf13/cobra"
+)
+
+var version = "dev"
+var configPath string
+var dryRun bool
 var rootCmd = &cobra.Command{
-	Use:     "db-syn <option>",
-	Short:   "DB Sync CLI Application",
-	Long:    "DB Sync is a simple CLI tool to manage your database synchronization.",
-	Example: "db-sync run",
-	// Args: cobra.ExactArgs(1),
-	// Run: func(cmd *cobra.Command, args []string) {
-	//     option := args[0]
-	//     switch option {
-	//     case "run":
-	//         fmt.Println("Starting sync...")
-	//     case "validate":
-	//         fmt.Println("Validating connections...")
-	//     default:
-	//         fmt.Println("invalid argument")
-	//     }
-	// },
+	Use:   "db-sync [option]",
+	Short: "A Powerful DB Sync CLI Application",
+	Long: `DB Sync is a simple CLI tool to manage your database synchronization.
+
+This can be used for single time syncronization or for continuous syncronization.`,
+	Args: cobra.ArbitraryArgs,
+	Run:  run,
 }
 
 func init() {
-	rootCmd.AddCommand(runCmd)
+	// Persistent flags available to all commands
+	rootCmd.Version = version
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "config.yaml", "Path to the config file")
+	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Dry run the command")
 }
 
-
 func Execute() {
- cobra.CheckErr(rootCmd.Execute())
+	cobra.CheckErr(rootCmd.Execute())
+}
+
+func run(cmd *cobra.Command, args []string) {
+	if dryRun {
+		fmt.Println("Dry run")
+		if configPath != "" {
+			fmt.Printf("[dry-run] Would load config from: %s\n", configPath)
+			fmt.Println("[dry-run] No changes will be made.")
+		}
+		return
+	}
 }
