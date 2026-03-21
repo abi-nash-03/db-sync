@@ -7,11 +7,9 @@ import (
 )
 
 var runCmd = &cobra.Command{
-    Use: "run",
-    Short : "To run the db-sync",
-    Run : func(cmd *cobra.Command, args []string) {
-        fmt.Println("Starting sync...")
-    },
+	Use:   "run",
+	Short: "To run the db-sync",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Starting sync...")
+	},
 }
-
-

@@ -1,8 +1,8 @@
 package cmd
 
 import (
+	"db-sync/config"
 	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -31,6 +31,11 @@ func Execute() {
 }
 
 func run(cmd *cobra.Command, args []string) {
+	_, err := config.LoadConfig(configPath)
+	if err != nil {
+		fmt.Println("Error loading config:", err)
+	}
+
 	if dryRun {
 		fmt.Println("Dry run")
 		if configPath != "" {

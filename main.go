@@ -4,7 +4,6 @@ import (
 	"db-sync/cmd"
 )
 
-
 func main() {
-    cmd.Execute()
+	cmd.Execute()
 }
