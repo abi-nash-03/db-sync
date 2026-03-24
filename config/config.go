@@ -77,21 +77,30 @@ func LoadConfig(configPath string) (*Config, error) {
 // }
 
 func (c *Config) Validate() error {
-	required := map[string]string{
-		"source.host":     c.Source.Host,
-		"source.user":     c.Source.User,
-		"source.password": c.Source.Password,
-		"source.database": c.Source.Database,
-		"dest.host":       c.Destination.Host,
-		"dest.user":       c.Destination.User,
-		"dest.password":   c.Destination.Password,
-		"dest.database":   c.Destination.Database,
-	}
+    required := map[string]string{
+        "source.host":     c.Source.Host,
+        "source.user":     c.Source.User,
+        "source.password": c.Source.Password,
+        "source.database": c.Source.Database,
+        "dest.host":       c.Destination.Host,
+        "dest.user":       c.Destination.User,
+        "dest.password":   c.Destination.Password,
+        "dest.database":   c.Destination.Database,
+    }
 
-	for field, value := range required {
-		if value == "" {
-			return fmt.Errorf("missing required config field: %s", field)
-		}
-	}
-	return nil
+    for field, value := range required {
+        if value == "" {
+            return fmt.Errorf("missing required config field: %s", field)
+        }
+    }
+
+    // validate integers separately
+    if c.Source.Port <= 0 || c.Source.Port > 65535 {
+        return fmt.Errorf("invalid source.port: %d (must be 1-65535)", c.Source.Port)
+    }
+    if c.Destination.Port <= 0 || c.Destination.Port > 65535 {
+        return fmt.Errorf("invalid dest.port: %d (must be 1-65535)", c.Destination.Port)
+    }
+
+    return nil
 }
