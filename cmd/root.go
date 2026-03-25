@@ -31,7 +31,7 @@ func Execute() {
 }
 
 func run(cmd *cobra.Command, args []string) {
-	_, err := config.LoadConfig(configPath)
+	err := config.LoadConfig(configPath)
 	if err != nil {
 		fmt.Println("Error loading config:", err)
 	}

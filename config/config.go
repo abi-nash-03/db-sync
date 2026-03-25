@@ -12,69 +12,48 @@ type Config struct {
 	Destination DatabaseConfig `yaml:"destination"`
 }
 
+var AppConfig *Config
+
+type SSHConfig struct {
+	Host string `yaml:"host"`
+	Port int `yaml:"port"`
+	User string `yaml:"user"`
+	KeyPath string `yaml:"key_path"`
+}
+
 type DatabaseConfig struct {
 	Host     string `yaml:"host"`
 	Port     int    `yaml:"port"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
+	SSH      SSHConfig `yaml:"ssh"`
+
 }
 
-func LoadConfig(configPath string) (*Config, error) {
+func LoadConfig(configPath string) (error) {
 
 	// Read the YAML file content
 	yamlFile, err := os.ReadFile(configPath)
 	if err != nil {
-		return nil, fmt.Errorf("error reading YAML file: %w", err)
+		return fmt.Errorf("error reading YAML file: %w", err)
 	}
 
-	var config Config
-	if err := yaml.Unmarshal(yamlFile, &config); err != nil {
-		return nil, fmt.Errorf("error unmarshalling YAML: %w", err)
+
+	if err := yaml.Unmarshal(yamlFile, &AppConfig); err != nil {
+		return fmt.Errorf("error unmarshalling YAML: %w", err)
 	}
 
-	if err := config.Validate(); err != nil {
-		return nil, fmt.Errorf("error validating config: %w", err)
+	if err := AppConfig.Validate(); err != nil {
+		return fmt.Errorf("error validating config: %w", err)
 	}
 
 	fmt.Println("Config loaded successfully")
-	fmt.Println(config)
-	return &config, nil
+	fmt.Println(AppConfig)	
+	
+	return nil
 }
 
-// func Validate(c *Config) error {
-// 	if c.Source.Host == "" {
-// 		return fmt.Errorf("source host is required")
-// 	}
-// 	if c.Source.Port == 0 {
-// 		return fmt.Errorf("source port is required")
-// 	}
-// 	if c.Source.User == "" {
-// 		return fmt.Errorf("source user is required")
-// 	}
-// 	if c.Source.Password == "" {
-// 		return fmt.Errorf("source password is required")
-// 	}
-// 	if c.Source.Database == "" {
-// 		return fmt.Errorf("source database is required")
-// 	}
-// 	if c.Destination.Host == "" {
-// 		return fmt.Errorf("destination host is required")
-// 	}
-// 	if c.Destination.Port == 0 {
-// 		return fmt.Errorf("destination port is required")
-// 	}
-// 	if c.Destination.User == "" {
-// 		return fmt.Errorf("destination user is required")
-// 	}
-// 	if c.Destination.Password == "" {
-// 		return fmt.Errorf("destination password is required")
-// 	}
-// 	if c.Destination.Database == "" {
-// 		return fmt.Errorf("destination database is required")
-// 	}
-// 	return nil
-// }
 
 func (c *Config) Validate() error {
     required := map[string]string{
@@ -82,10 +61,16 @@ func (c *Config) Validate() error {
         "source.user":     c.Source.User,
         "source.password": c.Source.Password,
         "source.database": c.Source.Database,
+		"source.ssh.host": c.Source.SSH.Host,
+		"source.ssh.user": c.Source.SSH.User,
+		"source.ssh.key_path": c.Source.SSH.KeyPath,
         "dest.host":       c.Destination.Host,
         "dest.user":       c.Destination.User,
         "dest.password":   c.Destination.Password,
         "dest.database":   c.Destination.Database,
+		"dest.ssh.host": c.Destination.SSH.Host,
+		"dest.ssh.user": c.Destination.SSH.User,
+		"dest.ssh.key_path": c.Destination.SSH.KeyPath,
     }
 
     for field, value := range required {
@@ -101,6 +86,14 @@ func (c *Config) Validate() error {
     if c.Destination.Port <= 0 || c.Destination.Port > 65535 {
         return fmt.Errorf("invalid dest.port: %d (must be 1-65535)", c.Destination.Port)
     }
+
+	// validate ssh ports
+	if c.Source.SSH.Port <= 0 || c.Source.SSH.Port > 65535 {
+		return fmt.Errorf("invalid source.ssh.port: %d (must be 1-65535)", c.Source.SSH.Port)
+	}
+	if c.Destination.SSH.Port <= 0 || c.Destination.SSH.Port > 65535 {
+		return fmt.Errorf("invalid dest.ssh.port: %d (must be 1-65535)", c.Destination.SSH.Port)
+	}
 
     return nil
 }

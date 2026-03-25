@@ -4,6 +4,12 @@ source:
   user: ""
   password: ""
   database: ""
+  ssh:
+    host: ""
+    port: 22
+    user: "ubuntu"
+    key_path: "~/.ssh/id_rsa" # prefrered
+    
 
 destination:
   host: ""
@@ -11,3 +17,8 @@ destination:
   user: ""
   password: ""
   database: ""
+  ssh:
+    host: ""
+    port: 22
+    user: "ubuntu"
+    key_path: "~/.ssh/id_rsa" 
