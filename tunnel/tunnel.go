@@ -99,6 +99,11 @@ func (t *Tunnel) acceptLoop() {
 }
 
 // forward pipes one local connection ↔ one remote connection
+
+// Now you have two open connections:
+// 1. localConn — our program talking to 127.0.0.1:XXXX on our machine
+// 2. remoteConn — the SSH client talking to MySQL on the remote server
+
 func (t *Tunnel) forward(localConn net.Conn) {
 	defer localConn.Close()
 
@@ -113,11 +118,11 @@ func (t *Tunnel) forward(localConn net.Conn) {
 	// Bidirectional copy — stop both directions when either side closes
 	done := make(chan struct{}, 2)
 	go func() {
-		io.Copy(remoteConn, localConn)
+		io.Copy(remoteConn, localConn) // your program → MySQL
 		done <- struct{}{}
 	}()
 	go func() {
-		io.Copy(localConn, remoteConn)
+		io.Copy(localConn, remoteConn) // MySQL → your program
 		done <- struct{}{}
 	}()
 	<-done // wait for the first half to finish, then defer closes both

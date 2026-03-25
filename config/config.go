@@ -49,7 +49,7 @@ func LoadConfig(configPath string) (error) {
 	}
 
 	fmt.Println("Config loaded successfully")
-	fmt.Println(AppConfig)	
+	// fmt.Println(AppConfig)	
 	
 	return nil
 }
