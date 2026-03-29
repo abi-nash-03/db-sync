@@ -1,4 +1,4 @@
-source:
+source: # from where i need to take the dump
   host: ""
   port: 3306
   user: ""
@@ -11,7 +11,7 @@ source:
     key_path: "~/.ssh/id_rsa" # prefrered
     
 
-destination:
+destination: # where i need to de-dump it
   host: ""
   port: 3306
   user: ""
