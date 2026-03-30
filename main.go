@@ -5,6 +5,7 @@ import (
 	// "database/sql"
 	"db-sync/config"
 	"db-sync/dumper"
+	"db-sync/restore"
 	"fmt"
 	// "db-sync/tunnel"
 	// "fmt"
@@ -19,12 +20,16 @@ func main() {
 	// =====================================
 	// Dumper testing
 	// =====================================
-	dump_path, err := dumper.Dump(config.AppConfig)
+	dumpPath, err := dumper.Dump(config.AppConfig)
 	if err != nil {
 		fmt.Println("Error while generating dump %w", err)
 		return
 	}
-	fmt.Println("Dump generated at:", dump_path)
+
+	// =====================================
+	// Restore testing
+	// =====================================
+	_, err = restore.Restore(dumpPath, config.AppConfig)
 
 	// =====================================
 	// Tunneling testing

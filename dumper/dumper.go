@@ -43,7 +43,14 @@ func Dump(c *config.Config) (string, error) {
 		"--routines",           // include stored procedures and functions
 		"--triggers",           // include triggers
 		"--events",             // include scheduled events
+		"--add-drop-database",  // ← adds DROP DATABASE IF EXISTS
+		"--add-drop-table",     // ← adds DROP TABLE IF EXISTS
+		"--databases",
 		c.Source.Database)
+
+	// this will add the DROP "DATABASE IF EXISTS" and "DROP TABLE IF EXISTS" command in the dump file
+	// so that when we restore the database, it will drop the database and tables first and then restore
+	// we dont neeed to handle that in restore function
 
 	// adding the password to env so that command won't prompt for password
 	cmd.Env = append(os.Environ(),
@@ -67,6 +74,8 @@ func Dump(c *config.Config) (string, error) {
 	if err := cmd.Run(); err != nil {
 		return "", fmt.Errorf("failed to run mysqldump: %w\n%s", err, stderr.String())
 	}
+
+	fmt.Printf("✓ Dump created successfully: %s\n", path)
 
 	return path, nil
 }
