@@ -43,7 +43,6 @@ func Dump(c *config.Config) (string, error) {
 		"--routines",           // include stored procedures and functions
 		"--triggers",           // include triggers
 		"--events",             // include scheduled events
-		"--add-drop-database",  // ← adds DROP DATABASE IF EXISTS
 		"--add-drop-table",     // ← adds DROP TABLE IF EXISTS
 		"--databases",
 		c.Source.Database)

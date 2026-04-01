@@ -117,7 +117,7 @@ On your **production server**, create a restricted readonly user that only allow
 
 ```sql
 CREATE USER 'readonly_user'@'your-dev-server-ip' IDENTIFIED BY 'strong-password';
-GRANT SELECT, LOCK TABLES, SHOW VIEW, EVENT, TRIGGER ON your_production_db.* TO 'readonly_user'@'your-dev-server-ip';
+GRANT SELECT, SHOW VIEW, EVENT, TRIGGER ON your_production_db.* TO 'readonly_user'@'your-dev-server-ip';
 FLUSH PRIVILEGES;
 ```
 

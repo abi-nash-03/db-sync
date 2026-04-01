@@ -1,16 +1,20 @@
 package restore
 
 import (
-	"os"
+	"strings"
 	"testing"
-	"time"
 )
 
-func TestDumpFileExists(t *testing.T) {
-	timestamp := time.Now().Format("2006-01-02_15-04-05")
-	dumpPath := "/tmp/dump_" + timestamp + ".sql"
-	_, err := os.Stat(dumpPath)
-	if os.IsNotExist(err) {
-		t.Errorf("dump file not found: %s", dumpPath)
+func TestRestoreFailsIfDumpFileNotFound(t *testing.T) {
+	// this file definitely doesn't exist
+	fakePath := "/tmp/this-file-does-not-exist-12345.sql"
+
+	_, err := Restore(fakePath, nil) // pass nil config - shouldn't reach that far
+	if err == nil {
+		t.Fatal("expected an error for missing dump file, got nil")
+	}
+
+	if !strings.Contains(err.Error(), "dump file not found") {
+		t.Errorf("expected 'dump file not found' in error, got: %s", err.Error())
 	}
 }
