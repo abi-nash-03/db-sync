@@ -24,7 +24,6 @@ func generateDumpPath() string {
 }
 
 func Dump(c *config.Config) (string, error) {
-	fmt.Println("Dumping database...")
 	path := generateDumpPath()
 
 	// check mysqldump exists before even trying
@@ -73,8 +72,6 @@ func Dump(c *config.Config) (string, error) {
 	if err := cmd.Run(); err != nil {
 		return "", fmt.Errorf("failed to run mysqldump: %w\n%s", err, stderr.String())
 	}
-
-	fmt.Printf("✓ Dump created successfully: %s\n", path)
 
 	return path, nil
 }

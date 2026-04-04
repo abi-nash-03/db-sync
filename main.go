@@ -5,10 +5,18 @@ import (
 	"db-sync/dumper"
 	"db-sync/restore"
 	"fmt"
+	"log/slog"
+	"os"
 	"time"
 )
 
 func main() {
+
+	//set this up once at startup
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+	slog.SetDefault(logger)
 
 	startTime := time.Now()
 	config.LoadConfig("config.yaml")

@@ -2,7 +2,10 @@ package cmd
 
 import (
 	"db-sync/config"
-	"fmt"
+	"db-sync/pipeline"
+	"log/slog"
+	"os"
+
 	"github.com/spf13/cobra"
 )
 
@@ -33,15 +36,13 @@ func Execute() {
 func run(cmd *cobra.Command, args []string) {
 	err := config.LoadConfig(configPath)
 	if err != nil {
-		fmt.Println("Error loading config:", err)
+		slog.Error("Error loading config:", err)
+		os.Exit(1)
+
 	}
 
-	if dryRun {
-		fmt.Println("Dry run")
-		if configPath != "" {
-			fmt.Printf("[dry-run] Would load config from: %s\n", configPath)
-			fmt.Println("[dry-run] No changes will be made.")
-		}
-		return
+	if err := pipeline.Run(config.AppConfig, dryRun); err != nil {
+		slog.Error("Error running pipeline:", err)
+		os.Exit(1)
 	}
 }

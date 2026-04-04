@@ -10,7 +10,7 @@ import (
 )
 
 func Restore(dumpPath string, c *config.Config) (string, error) {
-	fmt.Println("Restoring database...")
+	// fmt.Println("Restoring database...")
 
 	_, error := os.Stat(dumpPath)
 	if os.IsNotExist(error) {
@@ -49,8 +49,6 @@ func Restore(dumpPath string, c *config.Config) (string, error) {
 	if err := cmd.Run(); err != nil {
 		return "", fmt.Errorf("failed to run mysql restore: %w\n%s", err, stderr.String())
 	}
-
-	fmt.Printf("✓ Restore complete: %s is up to date\n", c.Destination.Database)
 
 	if err := os.Remove(dumpPath); err != nil {
 		fmt.Printf("Error removing dump file: %s\n", err)
