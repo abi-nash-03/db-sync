@@ -1,9 +1,7 @@
 package main
 
 import (
-	"db-sync/config"
-	"db-sync/dumper"
-	"db-sync/restore"
+	"db-sync/cmd"
 	"fmt"
 	"log/slog"
 	"os"
@@ -19,18 +17,8 @@ func main() {
 	slog.SetDefault(logger)
 
 	startTime := time.Now()
-	config.LoadConfig("config.yaml")
 
-	dumpPath, err := dumper.Dump(config.AppConfig)
-	if err != nil {
-		fmt.Println("Error while generating dump %w", err)
-		return
-	}
-
-	_, err = restore.Restore(dumpPath, config.AppConfig)
-	if err != nil {
-		fmt.Println("Error while restoring dump %w", err)
-	}
+	cmd.Execute()
 
 	endTime := time.Now()
 

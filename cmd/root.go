@@ -36,13 +36,13 @@ func Execute() {
 func run(cmd *cobra.Command, args []string) {
 	err := config.LoadConfig(configPath)
 	if err != nil {
-		slog.Error("Error loading config:", err)
+		slog.Error("Error loading config:", "error", err)
 		os.Exit(1)
 
 	}
 
 	if err := pipeline.Run(config.AppConfig, dryRun); err != nil {
-		slog.Error("Error running pipeline:", err)
+		slog.Error("Error running pipeline:", "error", err)
 		os.Exit(1)
 	}
 }

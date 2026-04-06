@@ -23,6 +23,8 @@ func Run(c *config.Config, dryRun bool) error {
 	}
 
 	// actual pipeline
+
+	// dump the source database
 	dumpPath, err := dumper.Dump(c)
 	if err != nil {
 		slog.Error("Dump failed: %s\n", "error", err)
@@ -31,6 +33,7 @@ func Run(c *config.Config, dryRun bool) error {
 
 	slog.Info("✓ Dump created successfully: %s\n", "info", dumpPath)
 
+	// restore the dump
 	_, err = restore.Restore(dumpPath, c)
 	if err != nil {
 		slog.Error("Restore failed: %s\n", "error", err)
