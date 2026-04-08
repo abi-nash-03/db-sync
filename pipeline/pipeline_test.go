@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func checkDryRunMode(t *testing.T) {
+func TestDryRunMode(t *testing.T) {
 	c := &config.Config{
 		Source: config.DatabaseConfig{
 			Host:     "localhost",

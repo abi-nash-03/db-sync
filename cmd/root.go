@@ -35,6 +35,7 @@ func Execute() {
 
 func run(cmd *cobra.Command, args []string) {
 	err := config.LoadConfig(configPath)
+
 	if err != nil {
 		slog.Error("Error loading config:", "error", err)
 		os.Exit(1)

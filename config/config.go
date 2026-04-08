@@ -35,6 +35,7 @@ func LoadConfig(configPath string) (error) {
 
 	// Read the YAML file content
 	yamlFile, err := os.ReadFile(configPath)
+	
 	if err != nil {
 		return fmt.Errorf("error reading YAML file: %w", err)
 	}
@@ -48,9 +49,6 @@ func LoadConfig(configPath string) (error) {
 		return fmt.Errorf("error validating config: %w", err)
 	}
 
-	fmt.Println("Config loaded successfully")
-	// fmt.Println(AppConfig)	
-	
 	return nil
 }
 
