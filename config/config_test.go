@@ -8,28 +8,29 @@ import (
 func TestLoadValidConfig(t *testing.T) {
 	// write a temp config file
 	content := `
-			source:
-			host: "localhost"
-			port: 3306
-			user: "root"
-			password: "secret"
-			database: "mydb"
-			ssh:
-				host: "remotehost"
-				port: 22
-				user: "ubuntu"
-				key_path: "~/.ssh/id_rsa"
-			destination:
-			host: "remotehost"
-			port: 3306
-			user: "dev"
-			password: "devpass"
-			database: "devdb"
-			ssh:
-				host: "remotehost"
-				port: 22
-				user: "ubuntu"
-				key_path: "~/.ssh/id_rsa"
+source:
+	host: "localhost"
+	port: 3306
+	user: "root"
+	password: "secret"
+	database: "devdb"
+	ssh:
+		host: "remotehost"
+		port: 22
+		user: "ubuntu"
+		key_path: "~/.ssh/id_rsa"
+destination:
+	host: "remotehost"
+	port: 3306
+	user: "dev"
+	password: "devpass"
+	database: "mydb"
+	ssh:
+		host: "remotehost"
+		port: 22
+		user: "ubuntu"
+		key_path: "~/.ssh/id_rsa"
+schedule: ""
 `
 	tmpFile, _ := os.CreateTemp("", "config-*.yaml")
 	tmpFile.WriteString(content)

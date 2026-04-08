@@ -22,3 +22,5 @@ destination: # where i need to de-dump it
     port: 22
     user: "ubuntu"
     key_path: "~/.ssh/id_rsa" 
+
+schedule: ""

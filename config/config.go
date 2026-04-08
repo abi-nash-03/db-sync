@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Source      DatabaseConfig `yaml:"source"`
 	Destination DatabaseConfig `yaml:"destination"`
+	Schedule    string         `yaml:"schedule"`
 }
 
 var AppConfig *Config
