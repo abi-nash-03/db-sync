@@ -2,18 +2,23 @@ package main
 
 import (
 	"db-sync/cmd"
-	"fmt"
 	"log/slog"
 	"os"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func main() {
 
 	//set this up once at startup
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+	main_logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
 	}))
+	logger := main_logger.With(
+		"run_id",
+		uuid.New().String(),
+	)
 	slog.SetDefault(logger)
 
 	startTime := time.Now()
@@ -22,10 +27,10 @@ func main() {
 
 	endTime := time.Now()
 
-	fmt.Println("==============================================")
-	fmt.Printf("Start time: %s\n", startTime.Format("2006-01-02 15:04:05"))
-	fmt.Printf("End time: %s\n", endTime.Format("2006-01-02 15:04:05"))
-	fmt.Printf("Total time Taken: %s\n", endTime.Sub(startTime))
-	fmt.Println("==============================================")
+	slog.Info("==============================================")
+	slog.Info("Start: %s", "Time", startTime.Format("2006-01-02 15:04:05"))
+	slog.Info("End: %s", "Time", endTime.Format("2006-01-02 15:04:05"))
+	slog.Info("Total %s", "Time Taken:", endTime.Sub(startTime))
+	slog.Info("==============================================")
 
 }

@@ -11,6 +11,7 @@ type Config struct {
 	Source      DatabaseConfig `yaml:"source"`
 	Destination DatabaseConfig `yaml:"destination"`
 	Schedule    string         `yaml:"schedule"`
+	Notify      NotifyConfig   `yaml:"notify"`
 }
 
 var AppConfig *Config
@@ -32,6 +33,9 @@ type DatabaseConfig struct {
 
 }
 
+type NotifyConfig struct {
+	SlackWebhook string `yaml:"slack_webhook"`
+}
 func LoadConfig(configPath string) (error) {
 
 	// Read the YAML file content
@@ -70,6 +74,7 @@ func (c *Config) Validate() error {
 		"dest.ssh.host": c.Destination.SSH.Host,
 		"dest.ssh.user": c.Destination.SSH.User,
 		"dest.ssh.key_path": c.Destination.SSH.KeyPath,
+		"notify.slack_webhook": c.Notify.SlackWebhook,
     }
 
     for field, value := range required {

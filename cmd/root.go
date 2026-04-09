@@ -3,6 +3,7 @@ package cmd
 import (
 	"db-sync/config"
 	"db-sync/pipeline"
+	"db-sync/scheduler"
 	"log/slog"
 	"os"
 
@@ -42,8 +43,15 @@ func run(cmd *cobra.Command, args []string) {
 
 	}
 
-	if err := pipeline.Run(config.AppConfig, dryRun); err != nil {
-		slog.Error("Error running pipeline:", "error", err)
-		os.Exit(1)
+	if config.AppConfig.Schedule != "" {
+		if err := scheduler.Start(config.AppConfig, config.AppConfig.Schedule); err != nil {
+			slog.Error("Error running scheduler:", "error", err)
+			os.Exit(1)
+		}
+	} else {
+		if err := pipeline.Run(config.AppConfig, dryRun); err != nil {
+			slog.Error("Error running pipeline:", "error", err)
+			os.Exit(1)
+		}
 	}
 }
