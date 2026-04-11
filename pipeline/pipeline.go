@@ -6,9 +6,12 @@ import (
 	"db-sync/restore"
 	"fmt"
 	"log/slog"
+	"time"
 )
 
 func Run(c *config.Config, dryRun bool) error {
+
+	startTime := time.Now()
 
 	if dryRun {
 		slog.Info("[dry-run] would dump source database",
@@ -40,6 +43,9 @@ func Run(c *config.Config, dryRun bool) error {
 		return fmt.Errorf("restore step failed: %w", err)
 	}
 	slog.Info("✓ Restore complete: %s is up to date\n", "info", c.Destination.Database)
+
+	endTime := time.Now()
+	slog.Info("Pipeline completed successfully", "start_time", startTime.Format("2006-01-02 15:04:05"), "end_time", endTime.Format("2006-01-02 15:04:05"), "time_taken", endTime.Sub(startTime))
 
 	return nil
 }

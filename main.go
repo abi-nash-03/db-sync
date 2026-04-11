@@ -4,14 +4,15 @@ import (
 	"db-sync/cmd"
 	"log/slog"
 	"os"
-	"time"
 
 	"github.com/google/uuid"
 )
 
+// Version is set at build time via -ldflags "-X main.Version=<tag>"
+var version = "dev"
+
 func main() {
 
-	//set this up once at startup
 	main_logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
 	}))
@@ -21,16 +22,7 @@ func main() {
 	)
 	slog.SetDefault(logger)
 
-	startTime := time.Now()
 
+	cmd.SetVersion(version)
 	cmd.Execute()
-
-	endTime := time.Now()
-
-	slog.Info("==============================================")
-	slog.Info("Start: %s", "Time", startTime.Format("2006-01-02 15:04:05"))
-	slog.Info("End: %s", "Time", endTime.Format("2006-01-02 15:04:05"))
-	slog.Info("Total %s", "Time Taken:", endTime.Sub(startTime))
-	slog.Info("==============================================")
-
 }

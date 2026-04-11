@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "dev"
+var version string
 var configPath string
 var dryRun bool
 var rootCmd = &cobra.Command{
@@ -25,9 +25,14 @@ This can be used for single time syncronization or for continuous syncronization
 
 func init() {
 	// Persistent flags available to all commands
-	rootCmd.Version = version
 	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "config.yaml", "Path to the config file")
 	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Dry run the command")
+}
+
+// SetVersion sets the version string for the root command
+func SetVersion(v string) {
+	version = v
+	rootCmd.Version = v
 }
 
 func Execute() {
