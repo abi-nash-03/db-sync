@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/robfig/cron/v3"
 )
@@ -33,7 +32,7 @@ func Start(cfg *config.Config, schedule string) error {
 		slog.Info("Scheduled run starting")
 
 		if config.AppConfig.Notify.SlackWebhook != "" {
-			if err := notifier.Notify(true, "Scheduled Database sync started"); err != nil {
+			if err := notifier.NotifyWithRetry(true, "Scheduled Database sync started", 3); err != nil {
 				slog.Error("Error sending notification", "error", err)
 			}
 		}
@@ -41,7 +40,7 @@ func Start(cfg *config.Config, schedule string) error {
 		if err := pipeline.Run(cfg, false); err != nil {
 			slog.Error("Scheduled Database sync failed", "error", err)
 			if config.AppConfig.Notify.SlackWebhook != "" {
-				if err := notifier.Notify(false, err.Error()); err != nil {
+				if err := notifier.NotifyWithRetry(false, err.Error(), 3); err != nil {
 					slog.Error("Error sending notification", "error", err)
 				}
 			}
@@ -49,7 +48,7 @@ func Start(cfg *config.Config, schedule string) error {
 		}
 		slog.Info("Scheduled Database sync completed successfully")
 		if config.AppConfig.Notify.SlackWebhook != "" {
-			if err := notifier.Notify(true, "Scheduled Database sync completed successfully"); err != nil {
+			if err := notifier.NotifyWithRetry(true, "Scheduled Database sync completed successfully", 3); err != nil {
 				slog.Error("Error sending notification", "error", err)
 			}
 		}
