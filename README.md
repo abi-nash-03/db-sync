@@ -13,14 +13,14 @@ A CLI tool to sync your production MySQL database to your development server. Ru
 
 **Option A — Download binary (recommended)**
 ```bash
-wget https://github.com/yourusername/db-sync/releases/download/v1.0.0/db-sync-linux-amd64
+wget https://github.com/abi-nash-03/db-sync/releases/download/v1.0.0/db-sync-linux-amd64
 chmod +x db-sync-linux-amd64
 sudo mv db-sync-linux-amd64 /usr/local/bin/db-sync
 ```
 
 **Option B — Build from source**
 ```bash
-git clone https://github.com/yourusername/db-sync.git
+git clone https://github.com/abi-nash-03/db-sync.git
 cd db-sync
 go mod tidy
 go build -o db-sync .
