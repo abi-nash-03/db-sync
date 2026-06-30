@@ -48,7 +48,7 @@ func Dump(c *config.Config) (string, error) {
 
 	// this will add the DROP "DATABASE IF EXISTS" and "DROP TABLE IF EXISTS" command in the dump file
 	// so that when we restore the database, it will drop the database and tables first and then restore
-	// we dont neeed to handle that in restore function
+	// we don`t need to handle that in restore function
 
 	// adding the password to env so that command won't prompt for password
 	cmd.Env = append(os.Environ(),
@@ -64,7 +64,7 @@ func Dump(c *config.Config) (string, error) {
 	defer outFile.Close()
 
 	// redirect mysqldump output to the file
-	// incase of large dump, we dont need to store in-memory
+	// in-case of large dump, we don't need to store in-memory
 	var stderr bytes.Buffer
 	cmd.Stdout = outFile
 	cmd.Stderr = &stderr

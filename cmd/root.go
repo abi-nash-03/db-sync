@@ -13,6 +13,7 @@ import (
 var version string
 var configPath string
 var dryRun bool
+var runOnce bool
 var rootCmd = &cobra.Command{
 	Use:   "db-sync [option]",
 	Short: "A Powerful DB Sync CLI Application",
@@ -27,6 +28,7 @@ func init() {
 	// Persistent flags available to all commands
 	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "config.yaml", "Path to the config file")
 	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "d", false, "Dry run the command")
+	rootCmd.PersistentFlags().BoolVarP(&runOnce, "run-now", "n", false, "Run the dump once instantly")
 }
 
 // SetVersion sets the version string for the root command
@@ -47,8 +49,13 @@ func run(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 
 	}
-
-	if config.AppConfig.Schedule != "" {
+	if runOnce == true {
+		slog.Info("Instant Dump Started.")
+		if err := pipeline.Run(config.AppConfig, false); err != nil {
+			slog.Error("Error running pipeline:", "error", err)
+			os.Exit(1)
+		}
+	} else if config.AppConfig.Schedule != "" {
 		if err := scheduler.Start(config.AppConfig, config.AppConfig.Schedule); err != nil {
 			slog.Error("Error running scheduler:", "error", err)
 			os.Exit(1)

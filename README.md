@@ -108,7 +108,7 @@ Type=simple
 ExecStart=/usr/local/bin/db-sync -c /etc/db-sync/config.yaml
 Restart=on-failure
 RestartSec=10
-User=ubuntu
+User=root
 StandardOutput=journal
 StandardError=journal
 
